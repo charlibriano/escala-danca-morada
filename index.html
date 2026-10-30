@@ -141,7 +141,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 /* ---------- erros na tela ---------- */
 const toastEl=document.getElementById('toast');let toastT;
 function toast(msg,err){toastEl.textContent=msg;toastEl.className='toast'+(err?' err':'');toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,err?8000:2600)}
-window.addEventListener('error',e=>toast('Erro: '+(e.message||'falha inesperada'),true));
+window.addEventListener('error',e=>{if(/ResizeObserver loop/.test(e.message||''))return;toast('Erro: '+(e.message||'falha inesperada'),true)});
 window.addEventListener('unhandledrejection',e=>toast('Erro: '+((e.reason&&e.reason.message)||e.reason||'falha inesperada'),true));
 
 /* ---------- constantes ---------- */
@@ -526,7 +526,8 @@ function draw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{try{
 
 function fit(){const st=document.querySelector('.stage'),cs=getComputedStyle(st);const aw=st.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),ah=st.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
   const k=Math.min(aw/cv.width,ah/cv.height);cv.style.width=Math.max(50,Math.floor(cv.width*k))+'px';cv.style.height=Math.max(50,Math.floor(cv.height*k))+'px'}
-window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(document.querySelector('.stage'));
+let fitRaf=0;const fitLater=()=>{cancelAnimationFrame(fitRaf);fitRaf=requestAnimationFrame(fit)};
+window.addEventListener('resize',fitLater);if(window.ResizeObserver)new ResizeObserver(fitLater).observe(document.querySelector('.stage'));
 /* ---------- painel ---------- */
 const pane=document.getElementById('pane');let tab='escala';
 function nomesConhecidos(){const set=new Set();Object.values(S.dados).forEach(m=>Object.values(m).forEach(c=>Object.values(c).forEach(e=>(e.n||[]).forEach(n=>{n=String(n||'').trim();if(n)set.add(n)}))));
