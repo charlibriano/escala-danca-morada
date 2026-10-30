@@ -56,7 +56,21 @@ textarea{resize:vertical;min-height:70px;line-height:1.4}
 .blk-h{display:flex;align-items:center;gap:8px;font-weight:700;padding-bottom:4px}
 .blk-h span.h{color:var(--muted);font-weight:600}
 .dot{width:10px;height:10px;border-radius:50%;flex:none}
-.erow{display:grid;grid-template-columns:44px 1fr 1fr 1fr 58px;gap:5px;align-items:center}
+.erow{display:grid;grid-template-columns:44px 1fr 1fr 1fr 52px 50px;gap:5px;align-items:center}
+.erow.av{grid-template-columns:44px 1fr 1fr 1fr 52px}
+.erow.pulada .dt{text-decoration:line-through;color:var(--muted)}
+.erow .pl-msg{grid-column:2 / 6;font-size:12px;color:var(--muted);font-style:italic}
+.chip.pl{color:var(--muted)}
+.acard{border-style:dashed}
+.erow select.warn{border-color:var(--danger);color:#ffd2d2}
+.dchips{display:flex;flex-wrap:wrap;gap:6px}
+.chip.dch{padding:7px 10px;font-variant-numeric:tabular-nums}
+.chip.dch[aria-pressed="true"]{background:var(--danger);border-color:var(--danger);color:#fff}
+.auslist{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.auslist b{font-weight:700}
+.fillbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fillbar .seg{grid-template-columns:repeat(2,38px)}
+.fillbar .lbl{font-size:12px;color:var(--muted);font-weight:600}
 .erow .dt{font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
 .erow select{padding:7px 4px 7px 7px;font-size:13px}
 .erow select:first-of-type{font-weight:700}
@@ -66,6 +80,13 @@ textarea{resize:vertical;min-height:70px;line-height:1.4}
 .pitem{display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid var(--line);border-radius:8px;padding:4px 4px 4px 10px;background:var(--field);min-width:0}
 .pitem span{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pitem .del{padding:5px 8px;font-size:12px}
+.pitem .nm{display:flex;align-items:center;gap:8px;min-width:0}
+.pitem .cnt{flex:none;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:2px 7px}
+.pitem.zero{border-color:var(--accent);border-style:dashed}
+.pitem.zero .cnt{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.resumo{display:flex;gap:8px;flex-wrap:wrap}
+.resumo span{font-size:12px;font-weight:700;border:1px solid var(--line);border-radius:20px;padding:4px 10px;color:var(--muted)}
+.resumo span b{color:var(--fg)}
 .erow.is-todas input{opacity:.3}
 .chip{border:1px solid var(--line);background:var(--field);border-radius:8px;padding:7px 0;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
@@ -103,6 +124,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .vrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
 .colorrow input{width:44px;height:36px;padding:2px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
 
+[hidden]{display:none!important}
+.acts{display:flex;gap:8px;flex:none}
+.modal{position:fixed;inset:0;background:rgba(4,6,14,.7);display:grid;place-items:center;z-index:30;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal-box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;width:min(520px,100%);display:flex;flex-direction:column;gap:10px}
+.modal-box textarea{min-height:260px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
+@media (max-width:400px){.acts .btn{padding:8px 10px;font-size:13px}}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1c2440;border:1px solid var(--line);
   padding:10px 16px;border-radius:10px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:calc(100% - 32px);z-index:20}
 .toast.err{border-color:var(--danger);color:#ffd2d2}
@@ -116,7 +143,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   .brand span{display:none}
 }
 @media (max-width:400px){
-  .erow{grid-template-columns:38px 1fr 1fr 1fr 50px;gap:4px}
+  .erow{grid-template-columns:36px 1fr 1fr 1fr 44px 42px;gap:4px}
+  .erow.av{grid-template-columns:36px 1fr 1fr 1fr 44px}
+  .chip{font-size:11px}
   .models{grid-template-columns:1fr 1fr}
 }
 </style>
@@ -125,7 +154,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <div class="app">
   <header class="top">
     <div class="brand"><b>Gerador de Escala</b><span id="topinfo"></span></div>
-    <button class="btn btn-main" id="baixar" type="button">Baixar PNG</button>
+    <div class="acts"><button class="btn" id="copiar" type="button">Copiar texto</button><button class="btn btn-main" id="baixar" type="button">Baixar PNG</button></div>
   </header>
   <main class="work">
     <section class="stage" aria-label="Prévia da imagem"><div class="cvwrap" id="cvwrap"><canvas id="cv" width="2160" height="2700"></canvas></div></section>
@@ -143,6 +172,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <datalist id="nomes"></datalist>
 <input type="file" id="f-foto" accept="image/*" hidden>
 <div class="toast" id="toast" hidden></div>
+<div class="modal" id="m-texto" hidden><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="m-tit">
+  <b id="m-tit">Texto da escala</b><p class="hint">Não consegui copiar sozinho neste aparelho. O texto já está selecionado: use Copiar do teclado ou segure e escolha Copiar.</p>
+  <textarea id="m-area" readonly></textarea><button type="button" class="btn" id="m-fechar">Fechar</button></div></div>
 
 <script>
 /* ---------- erros na tela ---------- */
@@ -198,8 +230,12 @@ function setCell(cid,d,fn){const k=mk();S.dados[k]=S.dados[k]||{};S.dados[k][cid
 function datasDo(dia){const out=[];const d=new Date(S.ano,S.mes,1);while(d.getMonth()===S.mes){if(d.getDay()===+dia)out.push(d.getDate());d.setDate(d.getDate()+1)}return out}
 const p2=n=>String(n).padStart(2,'0');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function blocos(){return S.cultos.map(c=>({c,rows:datasDo(c.dia).map(d=>{const e=getCell(c.id,d);
-  return {d,names:(e.n||[]).map(s=>String(s||'').trim()).filter(Boolean),todas:!!e.todas}})})).filter(b=>b.rows.length)}
+function avulsasMes(){return ((S.avulsas||{})[mk()]||[]).slice().sort((a,b)=>a.d-b.d)}
+function avById(id){return ((S.avulsas||{})[mk()]||[]).find(a=>a.id===id)}
+function linha(cid,d){const e=getCell(cid,d);return {d,names:[...new Set((e.n||[]).map(s=>String(s||'').trim()).filter(Boolean))],todas:!!e.todas}}
+function diasNoMes(){return new Date(S.ano,S.mes+1,0).getDate()}
+function blocos(){const B=S.cultos.map(c=>({c,rows:datasDo(c.dia).filter(d=>!getCell(c.id,d).pular).map(d=>linha(c.id,d))})).filter(b=>b.rows.length);
+  avulsasMes().filter(a=>a.d>=1&&a.d<=diasNoMes()).forEach(a=>B.push({c:Object.assign({},a,{dia:new Date(S.ano,S.mes,a.d).getDay()}),rows:[linha(a.id,a.d)]}));return B}
 function kickerTxt(){return (S.kicker||'').trim()||(MESES[S.mes].toUpperCase()+' · '+S.ano)}
 
 /* ---------- foto ---------- */
@@ -540,26 +576,76 @@ const pane=document.getElementById('pane');let tab='escala';
 function nomesConhecidos(){const set=new Set();Object.values(S.dados).forEach(m=>Object.values(m).forEach(c=>Object.values(c).forEach(e=>(e.n||[]).forEach(n=>{n=String(n||'').trim();if(n)set.add(n)}))));
   document.getElementById('nomes').innerHTML=[...set].sort((a,b)=>a.localeCompare(b,'pt')).map(n=>`<option value="${esc(n)}">`).join('')}
 
-function selNome(id,i,val,naLinha,label){const eq=ordena(S.equipe||[]);let o=`<option value="">—</option>`;
+function ausente(n,d){const m=(S.ausencias||{})[mk()];return !!(m&&m[n]&&m[n].includes(+d))}
+function selNome(id,i,val,naLinha,label,d){const eq=ordena(S.equipe||[]);let o=`<option value="">—</option>`;
   if(val&&!eq.includes(val))o+=`<option value="${esc(val)}" selected>${esc(val)} (fora da equipe)</option>`;
-  eq.forEach(n=>{o+=`<option value="${esc(n)}"${n===val?' selected':''}${n!==val&&naLinha.includes(n)?' disabled':''}>${esc(n)}</option>`});
-  return `<select id="${id}" data-i="${i}" aria-label="${esc(label)}">${o}</select>`}
-function travaRepetidos(row){const ss=[...row.querySelectorAll('select[data-i]')];ss.forEach(s=>{const outros=ss.filter(x=>x!==s).map(x=>x.value).filter(Boolean);[...s.options].forEach(op=>{if(op.value)op.disabled=outros.includes(op.value)})})}
-function paneEquipe(){const eq=ordena(S.equipe||[]);
+  eq.forEach(n=>{const au=ausente(n,d);o+=`<option value="${esc(n)}"${n===val?' selected':''}${n!==val&&(naLinha.includes(n)||au)?' disabled':''}>${esc(n)}${au?' (não pode)':''}</option>`});
+  const warn=val&&ausente(val,d);
+  return `<select id="${id}" data-i="${i}" aria-label="${esc(label)}"${warn?' class="warn" title="Essa pessoa avisou que não pode nesta data"':''}>${o}</select>`}
+function travaRepetidos(row){const d=+row.dataset.d;const ss=[...row.querySelectorAll('select[data-i]')];ss.forEach(s=>{const outros=ss.filter(x=>x!==s).map(x=>x.value).filter(Boolean);
+  [...s.options].forEach(op=>{if(op.value)op.disabled=outros.includes(op.value)||(op.value!==s.value&&ausente(op.value,d))});s.classList.toggle('warn',!!s.value&&ausente(s.value,d))})}
+function contagemMes(){const cnt={};blocos().forEach(b=>b.rows.forEach(r=>{if(r.todas)return;r.names.forEach(n=>{cnt[n]=(cnt[n]||0)+1})}));return cnt}
+function paneEquipe(){const eq=ordena(S.equipe||[]);const cnt=contagemMes();const zeros=eq.filter(n=>!cnt[n]).length;const mesNome=MESES[S.mes][0].toUpperCase()+MESES[S.mes].slice(1);
   return `<p class="hint">Quem está cadastrado aqui aparece para escolher na aba Escala.</p>
   <form class="addrow" id="f-add"><input type="text" id="f-novo" placeholder="Nome de quem entrou" autocomplete="off" maxlength="30" aria-label="Nome de quem entrou"><button class="btn btn-main" type="submit">Adicionar</button></form>
-  <div class="sec-t">${eq.length} ${eq.length===1?'pessoa':'pessoas'} na equipe</div>
-  ${eq.length?`<div class="plist">${eq.map(n=>`<div class="pitem"><span title="${esc(n)}">${esc(n)}</span><button type="button" class="del" data-act="rmp" data-n="${esc(n)}">Remover</button></div>`).join('')}</div>`:'<p class="hint">Ninguém cadastrado ainda.</p>'}
-  <p class="hint">Remover alguém não apaga as escalas já montadas com essa pessoa.</p>`}
+  <div class="sec-t">Vezes em ${esc(mesNome)} de ${S.ano}</div>
+  <div class="resumo"><span><b>${eq.length}</b> na equipe</span><span><b>${zeros}</b> ${zeros===1?'ainda sem escala':'ainda sem escala'}</span></div>
+  ${eq.length?`<div class="plist">${eq.map(n=>{const k=cnt[n]||0;return `<div class="pitem${k?'':' zero'}"><span class="nm"><span title="${esc(n)}" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n)}</span><span class="cnt" title="${k?`Escalada ${k} ${k===1?'vez':'vezes'} no mês`:'Ainda não escalada no mês'}">${k}×</span></span><button type="button" class="del" data-act="rmp" data-n="${esc(n)}">Remover</button></div>`}).join('')}</div>`:'<p class="hint">Ninguém cadastrado ainda.</p>'}
+  <p class="hint">A contagem soma todos os cultos do mês escolhido na aba Escala. Datas marcadas como <b>Todas</b> não entram, porque nelas todo mundo dança.</p>
+  <p class="hint">Remover alguém não apaga as escalas já montadas com essa pessoa.</p>
+  ${eq.length?paneAusencias(eq,mesNome):''}`}
+let ausSel='';
+function diasComCulto(){const s=new Set();S.cultos.forEach(c=>datasDo(c.dia).forEach(d=>{if(!getCell(c.id,d).pular)s.add(d)}));avulsasMes().filter(a=>a.d<=diasNoMes()).forEach(a=>s.add(a.d));return [...s].sort((a,b)=>a-b)}
+function paneAusencias(eq,mesNome){if(!eq.includes(ausSel))ausSel=eq[0];const dias=diasComCulto();const m=(S.ausencias||{})[mk()]||{};
+  const lista=eq.filter(n=>m[n]&&m[n].length).map(n=>`<span><b>${esc(n)}</b>: ${m[n].slice().sort((a,b)=>a-b).map(p2).join(', ')}</span>`).join('');
+  return `<div class="sec-t">Quem não pode em ${esc(mesNome)}</div>
+  <label class="f">Pessoa<select id="f-aus-p">${eq.map(n=>`<option value="${esc(n)}"${n===ausSel?' selected':''}>${esc(n)}</option>`).join('')}</select></label>
+  ${dias.length?`<div class="dchips" role="group" aria-label="Datas em que ${esc(ausSel)} não pode">${dias.map(d=>`<button type="button" class="chip dch" data-act="aus" data-d="${d}" aria-pressed="${ausente(ausSel,d)}">${p2(d)} ${DIA3[new Date(S.ano,S.mes,d).getDay()].toLowerCase()}</button>`).join('')}</div>`:'<p class="hint">Nenhuma data com culto neste mês.</p>'}
+  <p class="hint">Toque nas datas em que a pessoa não pode (fica vermelho). Nesses dias o nome fica bloqueado na Escala e o Preencher vazios pula ela.</p>
+  ${lista?`<div class="auslist">${lista}</div>`:''}`}
 function paneEscala(){let h=`<div class="grid2"><label class="f">Mês<select id="f-mes">${MESES.map((m,i)=>`<option value="${i}" ${i===S.mes?'selected':''}>${m[0].toUpperCase()+m.slice(1)}</option>`).join('')}</select></label>
   <label class="f">Ano<input type="number" id="f-ano" min="2020" max="2100" value="${S.ano}"></label></div>
-  <p class="hint">Escolha os nomes na lista; o primeiro de cada data sai em negrito. Marque <b>Todas</b> quando o grupo inteiro dança. Falta alguém? <button type="button" class="linkbtn" data-act="goequipe">Cadastre na aba Equipe</button>.</p>`;
+  <p class="hint">Escolha os nomes na lista; o primeiro de cada data sai em negrito. <b>Todas</b>: o grupo inteiro dança. <b>Pular</b>: não tem dança nessa data (some da arte). Falta alguém? <button type="button" class="linkbtn" data-act="goequipe">Cadastre na aba Equipe</button>.</p>
+  <div class="fillbar"><button type="button" class="btn btn-main" data-act="preencher">Preencher vazios</button>
+    <span class="lbl">Pessoas por data</span><div class="seg">${[2,3].map(n=>`<button type="button" data-act="porData" data-v="${n}" aria-pressed="${(S.porData||2)===n}">${n}</button>`).join('')}</div>
+    ${ultimoPreench&&ultimoPreench.k===mk()?'<button type="button" class="btn" data-act="desfazer">Desfazer</button>':''}</div>`;
   S.cultos.forEach(c=>{const ds=datasDo(c.dia);h+=`<div class="blk"><div class="blk-h"><span class="dot" style="background:${esc(c.cor)}"></span>${esc(c.nome)} <span class="h">${esc(c.hora)}</span></div>`;
     if(!ds.length)h+=`<p class="hint">Nenhuma data neste mês.</p>`;
-    ds.forEach(d=>{const e=getCell(c.id,d);h+=`<div class="erow ${e.todas?'is-todas':''}" data-c="${c.id}" data-d="${d}"><span class="dt">${p2(d)}/${p2(S.mes+1)}</span>
-      ${[0,1,2].map(i=>selNome(`n-${c.id}-${d}-${i}`,i,((e.n||[])[i]||'').trim(),(e.n||[]).map(s=>String(s||'').trim()).filter(Boolean),`${p2(d)}/${p2(S.mes+1)} ${c.nome} nome ${i+1}`)).join('')}
-      <button type="button" class="chip" data-act="todas" aria-pressed="${!!e.todas}">Todas</button></div>`});h+='</div>'});
-  if(!S.cultos.length)h+=`<p class="hint">Nenhum culto cadastrado. Adicione um na aba Cultos.</p>`;return h}
+    ds.forEach(d=>{const e=getCell(c.id,d);
+      if(e.pular){h+=`<div class="erow pulada" data-c="${c.id}" data-d="${d}"><span class="dt">${p2(d)}/${p2(S.mes+1)}</span><span class="pl-msg">Sem dança nesta data</span><button type="button" class="chip" data-act="pular" aria-pressed="true">Voltar</button></div>`;return}
+      h+=linhaEscala(c,d,e,false)});h+='</div>'});
+  if(!S.cultos.length)h+=`<p class="hint">Nenhum culto cadastrado. Adicione um na aba Cultos.</p>`;
+  const mesNome=MESES[S.mes][0].toUpperCase()+MESES[S.mes].slice(1);const nd=diasNoMes();
+  h+=`<div class="sec-t">Datas especiais de ${esc(mesNome)}</div>`;
+  avulsasMes().forEach(a=>{const e=getCell(a.id,a.d);h+=`<div class="ccard acard" data-aid="${a.id}">
+    <div class="row"><label class="f" style="flex:1">Nome<input type="text" id="a-nome-${a.id}" data-ak="nome" value="${esc(a.nome)}" placeholder="Ex.: Culto de Natal"></label><button type="button" class="del" data-act="delav">Remover</button></div>
+    <div class="grid3"><label class="f">Dia<select id="a-d-${a.id}" data-ak="d">${Array.from({length:nd},(_,i)=>i+1).map(d=>`<option value="${d}"${d===a.d?' selected':''}>${p2(d)} · ${DIA3[new Date(S.ano,S.mes,d).getDay()].toLowerCase()}</option>`).join('')}</select></label>
+      <label class="f">Horário<input type="text" id="a-hora-${a.id}" data-ak="hora" value="${esc(a.hora)}"></label>
+      <label class="f">Ícone<select id="a-ico-${a.id}" data-ak="icone">${Object.entries(ICONES).map(([k,v])=>`<option value="${k}" ${k===a.icone?'selected':''}>${v}</option>`).join('')}</select></label></div>
+    <div class="f">Cor${paleta('a-cor-'+a.id,a.cor,a.id,'data-ak="cor"')}</div>
+    ${linhaEscala(a,a.d,e,true)}</div>`});
+  h+=`<button type="button" class="btn" data-act="addav">+ Data avulsa</button><p class="hint">Para cultos fora da semana normal, como Natal, Ano-Novo, Santa Ceia ou conferência. Vale só para o mês escolhido.</p>`;
+  return h}
+/* preenche só vagas vazias: evita mesma pessoa no mesmo dia, depois quem tem menos vezes no mês, depois quem foi 1ª menos vezes, depois sorteio */
+let ultimoPreench=null;
+function preencherVazios(){const N=S.porData||2;const eq=(S.equipe||[]).slice();if(!eq.length){toast('Cadastre a equipe primeiro, na aba Equipe.',true);return}
+  const k=mk();const antes=JSON.stringify(S.dados[k]||{});const cnt=contagemMes(),lid={};
+  blocos().forEach(b=>b.rows.forEach(r=>{if(!r.todas&&r.names[0])lid[r.names[0]]=(lid[r.names[0]]||0)+1}));
+  const itens=[];S.cultos.forEach(c=>datasDo(c.dia).forEach(d=>itens.push({cid:c.id,d})));avulsasMes().filter(a=>a.d<=diasNoMes()).forEach(a=>itens.push({cid:a.id,d:a.d}));
+  itens.sort((x,y)=>x.d-y.d);
+  const noDia=d=>{const s=new Set();itens.filter(x=>x.d===d).forEach(x=>{const e=getCell(x.cid,d);if(e.pular)return;(e.n||[]).forEach(n=>{n=String(n||'').trim();if(n)s.add(n)})});return s};
+  let feitos=0;
+  itens.forEach(({cid,d})=>{const e0=getCell(cid,d);if(e0.pular||e0.todas)return;
+    for(let i=0;i<N;i++){const n=(getCell(cid,d).n||[]).map(s=>String(s||'').trim());if(n[i])continue;
+      const naLinha=new Set(n.filter(Boolean)),dia=noDia(d);const cand=eq.filter(p=>!naLinha.has(p)&&!ausente(p,d));if(!cand.length)break;
+      const pick=cand.map(p=>({p,a:dia.has(p)?1:0,b:cnt[p]||0,c:i===0?(lid[p]||0):0,r:Math.random()})).sort((x,y)=>x.a-y.a||x.b-y.b||x.c-y.c||x.r-y.r)[0].p;
+      setCell(cid,d,c=>{c.n=(c.n||[]).slice();while(c.n.length<3)c.n.push('');c.n[i]=pick});cnt[pick]=(cnt[pick]||0)+1;if(i===0)lid[pick]=(lid[pick]||0)+1;feitos++}});
+  if(!feitos){toast('Não há vagas vazias para preencher.');return}
+  ultimoPreench={k,antes};save();draw();const st=pane.scrollTop;showTab('escala');pane.scrollTop=st;
+  toast(`Preenchi ${feitos} ${feitos===1?'vaga':'vagas'}, começando por quem tinha menos vezes no mês.`)}
+function linhaEscala(c,d,e,av){return `<div class="erow ${av?'av ':''}${e.todas?'is-todas':''}" data-c="${c.id}" data-d="${d}"><span class="dt">${p2(d)}/${p2(S.mes+1)}</span>
+      ${[0,1,2].map(i=>selNome(`n-${c.id}-${d}-${i}`,i,((e.n||[])[i]||'').trim(),(e.n||[]).map(s=>String(s||'').trim()).filter(Boolean),`${p2(d)}/${p2(S.mes+1)} ${c.nome} nome ${i+1}`,d)).join('')}
+      <button type="button" class="chip" data-act="todas" aria-pressed="${!!e.todas}">Todas</button>${av?'':`<button type="button" class="chip pl" data-act="pular" aria-pressed="false" title="Sem dança nesta data">Pular</button>`}</div>`}
 
 const CORES=[['#ff8a3d','Laranja'],['#f2741f','Laranja queimado'],['#f2b134','Dourado'],['#e5484d','Vermelho'],['#ec5c9a','Rosa'],['#8e5cf7','Roxo'],['#3d6dff','Azul'],['#38b6ff','Azul-claro'],['#19c2a8','Turquesa'],['#4cc76a','Verde']];
 function paleta(inputId,valor,alvo,extra){const v=String(valor||'').toLowerCase();const naLista=CORES.some(([h])=>h===v);
@@ -613,6 +699,9 @@ document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.cl
 pane.addEventListener('input',e=>{const t=e.target;
   if(t.type==='color'){const g=t.closest('.sw');if(g)marcaSw(g,t.value)}
   const row=t.closest('.erow');if(row&&t.matches('input[data-i]')){setCell(row.dataset.c,+row.dataset.d,c=>{c.n[+t.dataset.i]=t.value});save();draw();return}
+  const ac=t.closest('.acard');if(ac&&t.dataset.ak){const a=avById(ac.dataset.aid);if(!a)return;const k=t.dataset.ak;
+    if(k==='d'){const nv=+t.value;if(nv!==a.d){const m=S.dados[mk()]||{};if(m[a.id]&&m[a.id][a.d]){m[a.id][nv]=m[a.id][a.d];delete m[a.id][a.d]}a.d=nv;save();draw();const st=pane.scrollTop;showTab('escala');pane.scrollTop=st}return}
+    a[k]=t.value;save();draw();return}
   const cc=t.closest('.ccard');if(cc&&t.dataset.k){const c=S.cultos.find(x=>x.id===cc.dataset.cid);if(c){c[t.dataset.k]=t.dataset.k==='dia'?+t.value:t.value;save();draw()}return}
   const map={'f-t1':'titulo1','f-t2':'titulo2','f-kicker':'kicker','f-vers':'versiculo','f-ref':'referencia','f-dest':'destaque'};
   if(map[t.id]){S[map[t.id]]=t.value;save();draw();return}
@@ -620,20 +709,33 @@ pane.addEventListener('input',e=>{const t=e.target;
   if(t.id==='f-ano'){const v=+t.value;if(v>=2020&&v<=2100){S.ano=v;save();draw();clearTimeout(t._t);t._t=setTimeout(()=>{const pos=t.selectionStart;showTab('escala');const n=document.getElementById('f-ano');n&&n.focus()},700)}}});
 function usaVerso(i){const v=VERSOS[i];if(!v)return;S.versiculo=v.t;S.referencia=v.r;const a=document.getElementById('f-vers'),b=document.getElementById('f-ref'),s=document.getElementById('f-vlist');
   if(a)a.value=v.t;if(b)b.value=v.r;if(s)s.value=String(i);save();draw()}
-pane.addEventListener('change',e=>{const t=e.target;if(t.id==='f-vlist'&&t.value!==''){usaVerso(+t.value);return}if(t.id==='f-mes'){S.mes=+t.value;save();draw();showTab('escala')}if(t.matches('.erow select[data-i]')){const row=t.closest('.erow');setCell(row.dataset.c,+row.dataset.d,c=>{c.n[+t.dataset.i]=t.value});travaRepetidos(row);save();draw()}});
+pane.addEventListener('change',e=>{const t=e.target;if(t.id==='f-aus-p'){ausSel=t.value;const st=pane.scrollTop;showTab('equipe');pane.scrollTop=st;return}if(t.id==='f-vlist'&&t.value!==''){usaVerso(+t.value);return}if(t.id==='f-mes'){S.mes=+t.value;save();draw();showTab('escala')}if(t.matches('.erow select[data-i]')){ultimoPreench=null;const row=t.closest('.erow');setCell(row.dataset.c,+row.dataset.d,c=>{c.n[+t.dataset.i]=t.value});travaRepetidos(row);save();draw()}});
 pane.addEventListener('submit',e=>{if(e.target.id!=='f-add')return;e.preventDefault();const inp=document.getElementById('f-novo');const v=inp.value.trim().replace(/\s+/g,' ');
   if(!v){toast('Digite o nome de quem entrou.');inp.focus();return}
   const ja=(S.equipe||[]).find(n=>n.toLocaleLowerCase('pt')===v.toLocaleLowerCase('pt'));if(ja){toast(`${ja} já está na equipe.`);inp.select();return}
   S.equipe=(S.equipe||[]).concat(v);save();showTab('equipe');const n=document.getElementById('f-novo');n&&n.focus();toast(`${v} entrou na equipe`)});
 pane.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
-  if(a==='todas'){const row=b.closest('.erow');let v;setCell(row.dataset.c,+row.dataset.d,c=>{c.todas=!c.todas;v=c.todas});b.setAttribute('aria-pressed',String(v));row.classList.toggle('is-todas',v);save();draw()}
+  if(a==='todas'){ultimoPreench=null;const row=b.closest('.erow');let v;setCell(row.dataset.c,+row.dataset.d,c=>{c.todas=!c.todas;v=c.todas});b.setAttribute('aria-pressed',String(v));row.classList.toggle('is-todas',v);save();draw()}
   else if(a==='add'){S.cultos.push({id:'c'+Date.now().toString(36),nome:'Sábado - Culto',dia:6,hora:'19h30',cor:'#e8590c',icone:'fogo'});save();draw();showTab('cultos');toast('Culto adicionado. Preencha os nomes na aba Escala.')}
   else if(a==='del'){if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='Confirmar';setTimeout(()=>{b.classList.remove('armed');b.textContent='Remover'},3500);return}
     const id=b.closest('.ccard').dataset.cid;S.cultos=S.cultos.filter(c=>c.id!==id);save();draw();showTab('cultos');toast('Culto removido')}
   else if(a==='modelo'){S.modelo=b.dataset.v;save();draw();showTab('visual')}
   else if(a==='formato'){S.formato=b.dataset.v;save();draw();showTab('visual')}
   else if(a==='sortear'){let i;const cur=VERSOS.findIndex(v=>v.r===S.referencia&&v.t===S.versiculo);do{i=Math.floor(Math.random()*VERSOS.length)}while(i===cur&&VERSOS.length>1);usaVerso(i);toast(VERSOS[i].r)}
-  else if(a==='sw'){const v=b.dataset.v,alvo=b.dataset.alvo;if(alvo==='dest')S.destaque=v;else{const c=S.cultos.find(x=>x.id===alvo);if(c)c.cor=v}marcaSw(b.closest('.sw'),v);save();draw()}
+  else if(a==='sw'){const v=b.dataset.v,alvo=b.dataset.alvo;if(alvo==='dest')S.destaque=v;else{const c=S.cultos.find(x=>x.id===alvo)||avById(alvo);if(c)c.cor=v}marcaSw(b.closest('.sw'),v);save();draw()}
+  else if(a==='aus'){const d=+b.dataset.d,n=ausSel;if(!n)return;S.ausencias=S.ausencias||{};const k=mk();S.ausencias[k]=S.ausencias[k]||{};const arr=S.ausencias[k][n]=S.ausencias[k][n]||[];
+    const ix=arr.indexOf(d);if(ix>=0)arr.splice(ix,1);else{arr.push(d);const ja=blocos().some(bl=>bl.rows.some(r=>r.d===d&&r.names.includes(n)));
+      if(ja)toast(`Atenção: ${n} já está escalada em ${p2(d)}/${p2(S.mes+1)}. Troque na aba Escala (o campo fica vermelho).`,true)}
+    if(!arr.length)delete S.ausencias[k][n];ultimoPreench=null;save();const st=pane.scrollTop;showTab('equipe');pane.scrollTop=st}
+  else if(a==='preencher'){preencherVazios()}
+  else if(a==='porData'){S.porData=+b.dataset.v;save();b.parentElement.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}
+  else if(a==='desfazer'){if(!ultimoPreench||ultimoPreench.k!==mk()){toast('Nada para desfazer.');return}S.dados[mk()]=JSON.parse(ultimoPreench.antes);ultimoPreench=null;save();draw();const st=pane.scrollTop;showTab('escala');pane.scrollTop=st;toast('Preenchimento desfeito')}
+  else if(a==='pular'){ultimoPreench=null;const row=b.closest('.erow');setCell(row.dataset.c,+row.dataset.d,c=>{c.pular=!c.pular});save();draw();const st=pane.scrollTop;showTab('escala');pane.scrollTop=st}
+  else if(a==='addav'){S.avulsas=S.avulsas||{};const k=mk();S.avulsas[k]=S.avulsas[k]||[];const usados=S.avulsas[k].map(x=>x.d);let d=1;while(usados.includes(d)&&d<diasNoMes())d++;
+    const id='a'+Date.now().toString(36);S.avulsas[k].push({id,d,nome:'Culto especial',hora:'19h',cor:'#f2b134',icone:'estrela'});save();draw();showTab('escala');
+    const card=pane.querySelector(`.acard[data-aid="${id}"]`);if(card){card.scrollIntoView({block:'center'});const n=card.querySelector('[data-ak="nome"]');n&&n.select()}toast('Data especial adicionada. Escolha o dia e o nome.')}
+  else if(a==='delav'){if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='Confirmar';setTimeout(()=>{b.classList.remove('armed');b.textContent='Remover'},3500);return}
+    const id=b.closest('.acard').dataset.aid,k=mk();S.avulsas[k]=(S.avulsas[k]||[]).filter(x=>x.id!==id);if(S.dados[k])delete S.dados[k][id];save();draw();const st=pane.scrollTop;showTab('escala');pane.scrollTop=st;toast('Data especial removida')}
   else if(a==='goequipe'){showTab('equipe');const n=document.getElementById('f-novo');n&&n.focus()}
   else if(a==='rmp'){if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='Confirmar';setTimeout(()=>{b.classList.remove('armed');b.textContent='Remover'},3500);return}
     const nm=b.dataset.n;S.equipe=(S.equipe||[]).filter(x=>x!==nm);save();showTab('equipe');toast(`${nm} saiu da lista`)}
@@ -646,6 +748,21 @@ document.getElementById('f-foto').addEventListener('change',e=>{const file=e.tar
       c.getContext('2d').drawImage(im,0,0,c.width,c.height);const url=c.toDataURL('image/jpeg',.88);fotoSrc=url;carregaFoto(url);try{localStorage.setItem(KEYF,url)}catch(err){}toast('Foto trocada. Ajuste o enquadramento nos controles.')};
     im.onerror=()=>toast('Não consegui ler essa imagem. Use JPG ou PNG.',true);im.src=rd.result};rd.readAsDataURL(file);e.target.value=''});
 
+/* ---------- texto para o WhatsApp ---------- */
+function textoEscala(){const mes=MESES[S.mes][0].toUpperCase()+MESES[S.mes].slice(1);
+  const tit=[S.titulo1,S.titulo2].filter(Boolean).join(' ').trim()||'ESCALA';
+  const L=[`*${tit} — ${mes} ${S.ano}*`];
+  blocos().forEach(b=>{L.push('');L.push(`*${b.c.nome}${b.c.hora?' · '+b.c.hora:''}*`);
+    b.rows.forEach(r=>{const dt=p2(r.d)+'/'+p2(S.mes+1);
+      L.push(r.todas?`${dt} — TODAS`:r.names.length?`${dt} — *${r.names[0]}*${r.names.length>1?', '+r.names.slice(1).join(', '):''}`:`${dt} — (a definir)`)})});
+  const v=String(S.versiculo||'').replace(/\*/g,'').trim();
+  if(v){L.push('');L.push(`_“${v}”_`);if(S.referencia)L.push(S.referencia)}
+  return L.join('\n')}
+document.getElementById('copiar').addEventListener('click',()=>{const txt=textoEscala();
+  const manual=()=>{const m=document.getElementById('m-texto'),a=document.getElementById('m-area');a.value=txt;m.hidden=false;a.focus();a.select()};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast('Texto copiado. É só colar no grupo.'),manual)}else manual()}catch(e){manual()}});
+document.getElementById('m-fechar').addEventListener('click',()=>{document.getElementById('m-texto').hidden=true});
+document.getElementById('m-texto').addEventListener('click',e=>{if(e.target.id==='m-texto')e.target.hidden=true});
 /* ---------- download ---------- */
 document.getElementById('baixar').addEventListener('click',async()=>{
   const blob=await new Promise(r=>cv.toBlob(r,'image/png'));if(!blob){toast('Não foi possível gerar a imagem.',true);return}
